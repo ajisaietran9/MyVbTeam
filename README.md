@@ -8,3 +8,4 @@ The training dashboard displays the history of our practice sessions, the date i
 this is automatically updated in the main dashboard.
 
 Just a small personal project to help me keep track of who hasn't paid me! 
+<img width="568" height="652" alt="image" src="https://github.com/user-attachments/assets/6eea8164-97a0-4337-aa26-cb4adabe8d3a" />
