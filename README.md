@@ -15,5 +15,6 @@ MAIN DASHBOARD - OVERVIEW OF OUTSTANDING BALANCES
 TRAINING DASHBOARD - CAN ADD DATES, CHANGE TRAINING COSTS, AND TICK OFF PAYMENTS
 <img width="846" height="680" alt="image" src="https://github.com/user-attachments/assets/bce7f496-e7d4-4ff8-97a7-fc968f347b8b" />
 
-ADMIN LOGIN - Since it's just a small project, the admin password is hardcoded, and allows you to login and make changes
+ADMIN LOGIN - Since it's just a small project, the admin password is hardcoded, 
+and allows you to login and make changes
 <img width="326" height="144" alt="image" src="https://github.com/user-attachments/assets/cee9f973-d6a6-42b0-9df6-5661e855f9aa" />
