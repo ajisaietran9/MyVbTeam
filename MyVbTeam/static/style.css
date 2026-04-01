@@ -1,0 +1,443 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg: #f2f2f7;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --border: #e5e5ea;
+    --accent: #007aff;
+    --accent-soft: #e8f0fe;
+    --green: #34c759;
+    --green-soft: #e8f8ed;
+    --red: #ff3b30;
+    --red-soft: #fff0ef;
+    --orange: #ff9500;
+    --orange-soft: #fff4e5;
+    --text: #1c1c1e;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #aeaeb2;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    padding: 48px 32px;
+}
+
+/* ── Page wrapper ── */
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* ── Header ── */
+h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+}
+
+.header-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0 16px;
+}
+
+.admin-badge {
+    background: var(--green-soft);
+    color: var(--green);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+/* ── Tab bar ── */
+.tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.tab {
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition: all 0.15s;
+}
+
+.tab.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+.tab:hover:not(.active) {
+    background: var(--bg);
+}
+
+/* ── Cards ── */
+.card {
+    background: var(--surface);
+    padding: 24px;
+    margin-bottom: 20px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+}
+
+.card h2 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+}
+
+/* ── Dashboard card ── */
+.dashboard-card h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.dashboard-grid > div {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.dashboard-grid p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 6px 0;
+}
+
+.dashboard-grid p:first-child {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+}
+
+/* ── Team setters ── */
+.team-setters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+/* ── Players grid ── */
+.players-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+/* ── Player card ── */
+.player-card {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.player-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+    transform: translateY(-2px);
+}
+
+.player-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* ── Player photo ── */
+.player-photo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 8px;
+}
+
+.player-photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.player-photo-placeholder {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.photo-upload-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent);
+    cursor: pointer;
+}
+
+.photo-upload-label:hover {
+    opacity: 0.8;
+}
+
+/* ── Finance columns ── */
+.finance-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.finance-section {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.finance-section h4 {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+}
+
+.finance-section p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin: 4px 0;
+}
+
+.finance-section p:last-of-type {
+    color: var(--red);
+    font-weight: 500;
+}
+
+/* ── Inputs ── */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="date"] {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+input:focus {
+    border-color: var(--accent);
+}
+
+/* ── Buttons ── */
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    width: 100%;
+    margin-top: 4px;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+a {
+    text-decoration: none;
+}
+
+a button {
+    width: auto;
+    margin-top: 0;
+}
+
+/* ── Login page ── */
+.login-card {
+    max-width: 380px;
+    margin: 120px auto;
+}
+
+/* ── Training page ── */
+.page-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 20px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    padding: 0;
+}
+
+.training-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.training-table th {
+    background: var(--bg);
+    padding: 12px 16px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+.training-table td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.name-col {
+    text-align: left !important;
+    font-weight: 500;
+    color: var(--text);
+    min-width: 120px;
+}
+
+.table-player-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.table-player-photo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.table-player-photo-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.tick-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text-tertiary);
+    border: 1px solid var(--border);
+    font-size: 0.85rem;
+    margin: 0;
+    width: 32px;
+}
+
+.tick-btn.ticked {
+    background: var(--green-soft);
+    color: var(--green);
+    border-color: var(--green);
+    font-weight: 700;
+}
+
+.tick-display {
+    color: var(--text-tertiary);
+}
+
+.tick-display.ticked {
+    color: var(--green);
+    font-weight: 700;
+}
+
+.delete-btn {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    font-size: 0.6rem;
+    background: var(--red-soft);
+    color: var(--red);
+    border-radius: 4px;
+    margin-left: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.summary-cell {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.paid-off {
+    border: 1.5px solid var(--green);
+    box-shadow: 0 0 12px rgba(52, 199, 89, 0.2);
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Training Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+
+    <h1>🏐 Our Volleyball Team </h1>
+
+    <div class="header-bar">
+        {% if is_admin %}
+            <span class="admin-badge">✅ Admin Mode</span>
+            <a href="/logout"><button>Logout</button></a>
+        {% else %}
+            <a href="/login"><button>Admin Login</button></a>
+        {% endif %}
+    </div>
+
+    <div class="tab-bar">
+        <a href="/" class="tab">📊 Dashboard</a>
+        <a href="/training" class="tab active">🏋️ Training</a>
+    </div>
+
+    <h2 class="page-title">🏋️ Training Attendance & Payments</h2>
+
+    <!-- Admin controls -->
+    {% if is_admin %}
+    <div class="card">
+        <h2>Set Session Cost</h2>
+        <form action="/set_training_cost" method="POST" style="display:flex; gap:10px; align-items:center;">
+            <input type="number" step="0.01" name="cost" value="{{ cost_per_session }}" placeholder="Cost per session">
+            <button type="submit" style="width:auto;">Set Cost</button>
+        </form>
+        <p style="margin-top:8px; font-size:0.82rem; color:var(--text-secondary);">Current: ${{ "%.2f"|format(cost_per_session) }} per session</p>
+    </div>
+
+    <div class="card">
+        <h2>Add Training Date</h2>
+        <form action="/add_training_session" method="POST" style="display:flex; gap:10px; align-items:center;">
+            <input type="date" name="date" required>
+            <button type="submit" style="width:auto;">Add Date</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Training table -->
+    {% if training_sessions %}
+    <div class="table-wrapper card">
+        <table class="training-table">
+            <thead>
+                <tr>
+                    <th class="name-col">Player</th>
+                    {% for date in training_sessions %}
+                    <th>
+                        {{ date }}
+                        {% if is_admin %}
+                        <form action="/delete_training_session" method="POST" style="display:inline;">
+                            <input type="hidden" name="date" value="{{ date }}">
+                            <button type="submit" class="delete-btn">✕</button>
+                        </form>
+                        {% endif %}
+                    </th>
+                    {% endfor %}
+                    <th>Sessions Paid</th>
+                    <th>Amount Paid</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in players %}
+                {% set player_index = loop.index0 %}
+                <tr>
+                    <!-- Player name + photo -->
+                    <td class="name-col">
+                        <div class="table-player-name">
+                            {% if player.photo %}
+                                <img src="{{ url_for('uploaded_file', filename=player.photo) }}" class="table-player-photo">
+                            {% else %}
+                                <div class="table-player-photo-placeholder">👤</div>
+                            {% endif %}
+                            {{ player.name }}
+                        </div>
+                    </td>
+
+                    <!-- Tick buttons for each session -->
+                    {% for date in training_sessions %}
+                    <td class="checkbox-cell">
+                        {% if is_admin %}
+                        <button
+                            class="tick-btn {% if date in player.training_sessions_paid %}ticked{% endif %}"
+                            data-index="{{ player_index }}"
+                            data-date="{{ date }}"
+                            onclick="togglePayment(this)">
+                            {% if date in player.training_sessions_paid %}✓{% else %}—{% endif %}
+                        </button>
+                        {% else %}
+                            {% if date in player.training_sessions_paid %}
+                                <span class="tick-display ticked">✓</span>
+                            {% else %}
+                                <span class="tick-display">—</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+
+                    <td class="summary-cell sessions-count">{{ player.training_sessions_paid | length }} / {{ training_sessions | length }}</td>
+                    <td class="summary-cell amount-paid">${{ "%.2f"|format(player.training_paid) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="card" style="text-align:center; color:var(--text-secondary);">
+        <p>No training sessions yet. Add a date above to get started!</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- JavaScript for instant tick without page reload -->
+<script>
+function togglePayment(button) {
+    const index = button.dataset.index;
+    const date = button.dataset.date;
+
+    // Update the button visually right away
+    const isTicked = button.classList.contains("ticked");
+    button.classList.toggle("ticked");
+    button.textContent = isTicked ? "—" : "✓";
+
+    // Send the update to the server in the background
+    const formData = new FormData();
+    formData.append("index", index);
+    formData.append("date", date);
+
+    fetch("/toggle_training_payment", {
+        method: "POST",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        // Update the summary columns in that row
+        const row = button.closest("tr");
+        row.querySelector(".amount-paid").textContent = "$" + data.training_paid.toFixed(2);
+        const ticked = row.querySelectorAll(".tick-btn.ticked").length;
+        const total = row.querySelectorAll(".tick-btn").length;
+        row.querySelector(".sessions-count").textContent = ticked + " / " + total;
+    })
+    .catch(() => {
+        // If something went wrong, revert the button
+        button.classList.toggle("ticked");
+        button.textContent = isTicked ? "✓" : "—";
+    });
+}
+</script>
+
+</body>
+</html>

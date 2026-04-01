@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Volleyball Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+
+    <h1>🏐 Our Volleyball Team </h1>
+
+    <div class="header-bar">
+        {% if is_admin %}
+            <span class="admin-badge">✅ Admin Mode</span>
+            <a href="/logout"><button>Logout</button></a>
+        {% else %}
+            <a href="/login"><button>Admin Login</button></a>
+        {% endif %}
+    </div>
+
+    <div class="tab-bar">
+        <a href="/" class="tab active">📊 Dashboard</a>
+        <a href="/training" class="tab">🏋️ Training</a>
+    </div>
+
+    <!-- Dashboard totals -->
+    {% set total_games = players | sum(attribute='games_amount') %}
+    {% set total_training = players | sum(attribute='training_amount') %}
+    {% set total_games_paid = players | sum(attribute='games_paid') %}
+    {% set total_training_paid = players | sum(attribute='training_paid') %}
+
+    <div class="card dashboard-card">
+        <h2>📊 Team Dashboard</h2>
+        <div class="dashboard-grid">
+            <div>
+                <p>🏐 Games Total: ${{ "%.2f"|format(total_games) }}</p>
+                <p>💵 Games Paid: ${{ "%.2f"|format(total_games_paid) }}</p>
+                <p>⚖️ Games Owing: ${{ "%.2f"|format([0, total_games - total_games_paid]|max) }}</p>
+            </div>
+            <div>
+                <p>🏋️ Training Total: ${{ "%.2f"|format(total_training) }}</p>
+                <p>💵 Training Paid: ${{ "%.2f"|format(total_training_paid) }}</p>
+                <p>⚖️ Training Owing: ${{ "%.2f"|format([0, total_training - total_training_paid]|max) }}</p>
+            </div>
+        </div>
+
+        <!-- Admin: split costs across team -->
+        {% if is_admin %}
+        <div class="team-setters">
+            <form action="/set_team_games_amount" method="POST">
+                <input type="number" step="0.01" name="total" placeholder="Set total games cost (splits evenly)">
+                <button type="submit">Split Games Cost</button>
+            </form>
+            <form action="/set_team_training_amount" method="POST">
+                <input type="number" step="0.01" name="total" placeholder="Set total training cost (splits evenly)">
+                <button type="submit">Split Training Cost</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Admin: add a new player -->
+    {% if is_admin %}
+    <div class="card">
+        <h2>Add Player</h2>
+        <form method="POST">
+            <input type="text" name="name" placeholder="Enter player name" required>
+            <button type="submit">Add</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Player cards -->
+    <div class="players-grid">
+        {% for player in players %}
+        <div class="player-card {% if player.games_paid >= player.games_amount and player.training_paid >= player.training_amount %}paid-off{% endif %}">
+
+            <!-- Photo -->
+            <div class="player-photo-wrapper">
+                {% if player.photo %}
+                    <img src="{{ url_for('uploaded_file', filename=player.photo) }}" class="player-photo">
+                {% else %}
+                    <div class="player-photo-placeholder">👤</div>
+                {% endif %}
+
+                {% if is_admin %}
+                <form action="/upload_photo/{{ loop.index0 }}" method="POST" enctype="multipart/form-data">
+                    <label class="photo-upload-label">
+                        📷 Change Photo
+                        <input type="file" name="photo" accept="image/*" onchange="this.form.submit()" style="display:none;">
+                    </label>
+                </form>
+                {% endif %}
+            </div>
+
+            <h3>{{ player.name }}</h3>
+
+            <!-- Games and Training side by side -->
+            <div class="finance-columns">
+
+                <div class="finance-section">
+                    <h4>🏐 Games</h4>
+                    <p>Total: ${{ "%.2f"|format(player.games_amount) }}</p>
+                    <p>Paid: ${{ "%.2f"|format(player.games_paid) }}</p>
+                    <p>Owing: ${{ "%.2f"|format([0, player.games_amount - player.games_paid]|max) }}</p>
+                    {% if is_admin %}
+                    <form action="/add_games_payment/{{ loop.index0 }}" method="POST">
+                        <input type="number" step="0.01" name="payment" placeholder="Add payment">
+                        <button type="submit">Add Payment</button>
+                    </form>
+                    {% endif %}
+                </div>
+
+                <div class="finance-section">
+                    <h4>🏋️ Training</h4>
+                    <p>Total: ${{ "%.2f"|format(player.training_amount) }}</p>
+                    <p>Paid: ${{ "%.2f"|format(player.training_paid) }}</p>
+                    <p>Owing: ${{ "%.2f"|format([0, player.training_amount - player.training_paid]|max) }}</p>
+                    {% if is_admin %}
+                    <form action="/add_training_payment/{{ loop.index0 }}" method="POST">
+                        <input type="number" step="0.01" name="payment" placeholder="Add payment">
+                        <button type="submit">Add Payment</button>
+                    </form>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>
